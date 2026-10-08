@@ -20,7 +20,7 @@ import { useNextClassTimer } from'./hooks/useNextClassTimer';
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 // Robust Base64 Encoded SVG Logo (Lama Face)
-const LAMA_LOGO_URL ="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI1NiIgZmlsbD0iIzYzNjZmMSIvPjxwYXRoIGQ9Ik0xODYgMTQwIFExNjYgODAgMjI2IDEyMCBMMjU2IDE4MCBMMjg2IDEyMCBRMzQ2IDgwIDMyNiAxNDAiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTg2IiB5PSIxODAiIHdpZHRoPSIxNDAiIGhlaWdodD0iMjIwIiByeD0iNzAiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iMjMxIiBjeT0iMjgwIiByPSIxOCIgZmlsbD0iIzFlMjkzYiIvPjxjaXJjbGUgY3g9IjI4MSIgY3k9IjI4MCIgcj0iMTgiIGZpbGw9IiMxZTI5M2IiLz48ZWxsaXBzZSBjeD0iMjU2IiBjeT0iMzMwIiByeD0iNDAiIHJ5PSIzMCIgZmlsbD0iI2UwZTdmZiIvPjxwYXRoIGQ9Ik0yNTYgMzMwIHYyMCBxMCAxNSAtMTUgMTUgbTE1IC0xNSBxMCAxNSAxNSAxNSIgc3Ryb2tlPSIjMWUyOTNiIiBzdHJva2Utd2lkdGg9IjYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==";
+const LAMA_LOGO_URL = "/pwa-512x512.jpg";
 
 export default function App() {
  // --- Lazy Initialization ---
