@@ -205,13 +205,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
  {/* Footer */}
  <div className="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
- <div className="flex items-center gap-3 text-gray-400 dark:text-gray-500 text-xs font-semibold">
- <Info size={16} />
+ <div className="mb-4 bg-white dark:bg-gray-800 p-3 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+ <p className="text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">
+ Fikirlerinizi bekliyoruz 💡
+ </p>
+ <a 
+ href="mailto:osmangunduzsilmeoglu@gmail.com"
+ className="text-indigo-500 dark:text-indigo-400 text-xs font-medium hover:underline block break-all"
+ >
+ osmangunduzsilmeoglu@gmail.com
+ </a>
+ </div>
+ <div className="flex items-center justify-between">
+ <div className="flex items-center gap-2 text-gray-400 dark:text-gray-500 text-xs font-semibold">
+ <Info size={14} />
  <span>{t('version')} 1.1.0</span>
  </div>
- <p className="mt-2 text-[10px] text-gray-300 dark:text-gray-600">
- Created by Osman Gündüz Silmeoğlu
+ <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
+ by Osman Gündüz Silmeoğlu
  </p>
+ </div>
  </div>
  </div>
  </>
