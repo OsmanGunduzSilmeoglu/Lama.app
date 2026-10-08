@@ -10,6 +10,7 @@ import { AddCourseModal } from'./components/AddCourseModal';
 import { CourseDetailModal } from'./components/CourseDetailModal';
 import { EndTermModal } from'./components/EndTermModal';
 import { RecordsModal } from'./components/RecordsModal';
+import { InstallPromptModal } from'./components/InstallPromptModal';
 import { CalendarDays, Plus, History, Trash2, X } from'lucide-react';
 import { format } from'date-fns';
 import { enUS, tr, es, de, fr } from'date-fns/locale';
@@ -600,20 +601,22 @@ export default function App() {
  isDanger={true}
  />
 
- <ConfirmModal
- isOpen={isResetConfirmOpen}
- onClose={() => setIsResetConfirmOpen(false)}
- onConfirm={() => {
- handleResetApp();
- setIsResetConfirmOpen(false);
- }}
- title={t('resetTitle')}
- message={t('resetDesc')}
- confirmText={t('resetBtn')}
- cancelText={t('cancel')}
- isDanger={true}
- />
- </div>
- </div>
- );
+  <ConfirmModal
+    isOpen={isResetConfirmOpen}
+    onClose={() => setIsResetConfirmOpen(false)}
+    onConfirm={() => {
+    handleResetApp();
+    setIsResetConfirmOpen(false);
+    }}
+    title={t('resetTitle')}
+    message={t('resetDesc')}
+    confirmText={t('resetBtn')}
+    cancelText={t('cancel')}
+    isDanger={true}
+  />
+  
+  <InstallPromptModal />
+  </div>
+  </div>
+  );
 }
