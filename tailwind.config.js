@@ -5,6 +5,30 @@ export default {
   theme: {
     extend: {
       colors: {
+        indigo: {
+          50: '#FFF0F0',
+          100: '#FFDCDC',
+          200: '#F5C6C6',
+          300: '#EBACAC',
+          400: '#D8A2A2',
+          500: '#C78B8B',
+          600: '#B57474',
+          700: '#9E5B5B',
+          800: '#854646',
+          900: '#6E3434',
+        },
+        purple: {
+          50: '#F4F7EF',
+          100: '#E1E9D5',
+          200: '#C6D6B3',
+          300: '#ABC290',
+          400: '#8EA66B',
+          500: '#7A915A',
+          600: '#647A47',
+          700: '#4F6136',
+          800: '#3D4A2A',
+          900: '#2A331D',
+        },
         gray: {
           750: '#2d3748',
           850: '#1a202c',
@@ -12,7 +36,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Outfit Variable"', 'sans-serif'],
+        sans: ['"Nunito Variable"', 'sans-serif'],
       },
       spacing: {
         'safe-top': 'env(safe-area-inset-top)',

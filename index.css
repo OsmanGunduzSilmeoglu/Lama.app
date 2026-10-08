@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Outfit Variable', sans-serif;
+  font-family: 'Nunito Variable', sans-serif;
   /* Prevent pull-to-refresh on mobile */
   overscroll-behavior-y: none;
   user-select: none;
