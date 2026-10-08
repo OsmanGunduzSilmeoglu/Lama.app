@@ -11,6 +11,7 @@ import { CourseDetailModal } from'./components/CourseDetailModal';
 import { EndTermModal } from'./components/EndTermModal';
 import { RecordsModal } from'./components/RecordsModal';
 import { InstallPromptModal } from'./components/InstallPromptModal';
+import { TourGuide } from'./components/TourGuide';
 import { CalendarDays, Plus, History, Trash2, X } from'lucide-react';
 import { format } from'date-fns';
 import { enUS, tr, es, de, fr } from'date-fns/locale';
@@ -405,7 +406,7 @@ export default function App() {
  <div className="flex items-center gap-5">
  <button 
  onClick={() => setIsSidebarOpen(true)}
- className="relative group cursor-pointer"
+ id="tour-menu-logo" className="relative group cursor-pointer"
  title={t('menu')}
  >
  <img 
@@ -492,7 +493,7 @@ export default function App() {
  <button
  onClick={() => setIsAddModalOpen(true)}
  className="cursor-pointer bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 p-4 rounded-2xl shadow-sm hover:shadow-md hover:scale-105 transition-all border border-gray-200 dark:border-gray-700 group"
- title="Manuel Ekle"
+ id="tour-add-btn" title="Manuel Ekle"
  >
  <Plus size={24} strokeWidth={3} className="group-hover:rotate-90 transition-transform" />
  </button>
@@ -502,7 +503,7 @@ export default function App() {
  <button 
  onClick={() => setIsScheduleOpen(true)}
  className="cursor-pointer bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 p-4 rounded-2xl shadow-sm hover:shadow-md hover:scale-105 transition-all active:scale-95 border border-transparent"
- title={t('weeklySchedule')}
+ id="tour-schedule-btn" title={t('weeklySchedule')}
  >
  <CalendarDays size={28} strokeWidth={2.5} />
  </button>
@@ -616,6 +617,7 @@ export default function App() {
   />
   
   <InstallPromptModal />
+  {!isSelectionMode && !viewingArchive && <TourGuide />}
   </div>
   </div>
   );
