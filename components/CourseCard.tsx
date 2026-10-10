@@ -420,9 +420,6 @@ export const CourseCard: React.FC<CourseCardProps> = ({
               <Clock size={14} className="text-indigo-500 dark:text-indigo-400" />
               <span className="text-xs font-bold text-gray-600 dark:text-gray-300">{course.time}</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-indigo-50/70 dark:bg-indigo-900/30 px-3 py-1.5 rounded-xl border border-indigo-100 dark:border-indigo-800/30">
-              <span className="text-xs font-black text-indigo-600 dark:text-indigo-400">{weeklyHours} Saat/Hafta</span>
-            </div>
 
             {course.classroom && (
               <div className="flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-xl border border-indigo-100 dark:border-indigo-800/30">
