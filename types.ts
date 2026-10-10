@@ -23,6 +23,7 @@ export interface TermArchive {
   date: string; // ISO Date string
   courses: Course[];
   finalWeek: number;
+  termWeeks?: number;
 }
 
 export const DAYS_OF_WEEK = [

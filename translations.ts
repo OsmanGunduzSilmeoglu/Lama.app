@@ -106,7 +106,7 @@ export const translations: any = {
     // End Term & Records
     saveTermTitle: "Dönemi Bitir ve Kaydet",
     termNamePlaceholder: "Örn: 2023 Güz Dönemi",
-    saveTermDesc: "Mevcut tüm derslerini, notlarını ve devamsızlıklarını bu isimle arşivleyeceğiz.",
+    saveTermDesc: "Mevcut tüm derslerini, ders not defterlerini ve devamsızlıklarını bu isimle arşivleyeceğiz.",
     saveBtn: "Arşivle",
     recordsTitle: "Geçmiş Dönem Kayıtları",
     noRecords: "Henüz arşivlenmiş bir dönem yok.",
@@ -225,7 +225,7 @@ export const translations: any = {
     enterMidtermFirst: "Enter midterm score first for calculation.",
     saveTermTitle: "End Term & Save",
     termNamePlaceholder: "e.g., 2023 Fall Term",
-    saveTermDesc: "We will archive all current courses, grades, and attendance under this name.",
+    saveTermDesc: "We will archive all current courses, notebooks, grades, and attendance under this name.",
     saveBtn: "Archive",
     recordsTitle: "Past Term Records",
     noRecords: "No archived terms yet.",

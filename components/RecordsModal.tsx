@@ -1,6 +1,6 @@
 import React from'react';
 import { Button } from'./Button';
-import { X, Archive, CalendarDays, Trash2, ChevronRight, Clock } from'lucide-react';
+import { X, Archive, CalendarDays, Trash2, ChevronRight, Clock, BookOpen } from'lucide-react';
 import { TermArchive } from'../types';
 import { format } from'date-fns';
 
@@ -68,6 +68,12 @@ export const RecordsModal: React.FC<RecordsModalProps> = ({
  <Clock size={12} />
  <span>{archive.courses.length} Ders</span>
  </div>
+ {archive.courses.some(c => c.weeklyNotes && Object.values(c.weeklyNotes).some(n => typeof n === 'string' && n.trim().length > 0)) && (
+ <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold">
+ <BookOpen size={12} />
+ <span>Not Defterli</span>
+ </div>
+ )}
  </div>
  </div>
  <div className="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1">

@@ -238,7 +238,18 @@ export default function App() {
   };
 
  const handleUpdateCourse = (id: string, updatedData: Partial<Course>) => {
- if (viewingArchive) return; // Prevent editing in archive mode
+  if (viewingArchive) {
+    setViewingArchive(prev => {
+      if (!prev) return null;
+      const updatedArchive = {
+        ...prev,
+        courses: prev.courses.map(c => c.id === id ? { ...c, ...updatedData } : c)
+      };
+      setArchives(prevArchives => prevArchives.map(a => a.id === prev.id ? updatedArchive : a));
+      return updatedArchive;
+    });
+    return;
+  }
 
  setCourses(prevCourses => prevCourses.map(c => 
  c.id === id ? { ...c, ...updatedData } : c
@@ -333,7 +344,8 @@ export default function App() {
  id: generateId(),
  name: name,
  date: new Date().toISOString(),
- courses: courses,
+ courses: JSON.parse(JSON.stringify(courses)),
+ termWeeks: termWeeks,
  finalWeek: currentWeek
  };
  setArchives(prev => [newArchive, ...prev]);
