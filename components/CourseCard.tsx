@@ -313,14 +313,31 @@ export const CourseCard: React.FC<CourseCardProps> = ({
                 <Clock size={14} className="text-gray-400 mr-2" />
                 <input
                   type="text"
+                  inputMode="numeric"
                   value={editForm.time}
                   onChange={(e) => {
-                    let val = e.target.value.replace(/[^\d:]/g, '');
-                    if (val.length === 2 && !val.includes(':') && editForm.time.length < val.length) {
-                      val += ':';
+                    let raw = e.target.value;
+                    let val = raw.replace(/[^\d]/g, '');
+                    if (val.length > 4) val = val.slice(0, 4);
+
+                    if (val.length >= 2) {
+                      let h = parseInt(val.slice(0, 2));
+                      if (h > 23) val = '23' + val.slice(2);
                     }
-                    if (val.length > 5) val = val.slice(0, 5);
-                    setEditForm({...editForm, time: val});
+                    if (val.length >= 4) {
+                      let m = parseInt(val.slice(2, 4));
+                      if (m > 59) val = val.slice(0, 2) + '59';
+                    }
+
+                    let formatted = val;
+                    if (val.length === 2 && raw.endsWith(':')) {
+                      formatted = val + ':';
+                    } else if (val.length > 2) {
+                      formatted = val.slice(0, 2) + ':' + val.slice(2);
+                    } else if (val.length === 2 && raw.length > editForm.time.length) {
+                      formatted = val + ':';
+                    }
+                    setEditForm({...editForm, time: formatted});
                   }}
                   className="bg-transparent text-sm text-gray-700 dark:text-gray-300 outline-none font-bold py-1 w-[4.5rem]"
                   placeholder="09:30"

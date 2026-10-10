@@ -126,14 +126,31 @@ export const AddCourseModal: React.FC<AddCourseModalProps> = ({
               <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5 ml-1">Başlangıç Saati</label>
               <input
                 type="text"
+                inputMode="numeric"
                 value={time}
                 onChange={(e) => {
-                  let val = e.target.value.replace(/[^\d:]/g, '');
-                  if (val.length === 2 && !val.includes(':') && time.length < val.length) {
-                    val += ':';
+                  let raw = e.target.value;
+                  let val = raw.replace(/[^\d]/g, '');
+                  if (val.length > 4) val = val.slice(0, 4);
+
+                  if (val.length >= 2) {
+                    let h = parseInt(val.slice(0, 2));
+                    if (h > 23) val = '23' + val.slice(2);
                   }
-                  if (val.length > 5) val = val.slice(0, 5);
-                  setTime(val);
+                  if (val.length >= 4) {
+                    let m = parseInt(val.slice(2, 4));
+                    if (m > 59) val = val.slice(0, 2) + '59';
+                  }
+
+                  let formatted = val;
+                  if (val.length === 2 && raw.endsWith(':')) {
+                    formatted = val + ':';
+                  } else if (val.length > 2) {
+                    formatted = val.slice(0, 2) + ':' + val.slice(2);
+                  } else if (val.length === 2 && raw.length > time.length) {
+                    formatted = val + ':';
+                  }
+                  setTime(formatted);
                 }}
                 className="w-full px-3 py-3 bg-gray-50 dark:bg-gray-700/60 border border-gray-100 dark:border-gray-700 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 rounded-2xl transition-all outline-none text-gray-800 dark:text-white font-semibold text-sm placeholder-gray-400"
                 placeholder="Örn: 09:30"
