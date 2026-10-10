@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Course } from '../types';
 import { X, BookOpen, ChevronDown, ChevronUp, Check, Trash2, Sparkles, Calendar } from 'lucide-react';
 
@@ -80,10 +81,13 @@ export const CourseNotesModal: React.FC<CourseNotesModalProps> = ({
   // Total weeks with notes
   const totalNotesCount = Object.values(notes).filter(n => typeof n === 'string' && n.trim().length > 0).length;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
+  const modalContent = (
+    <div 
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in overflow-y-auto"
+      onClick={onClose}
+    >
       <div 
-        className="bg-white dark:bg-gray-800 w-full max-w-lg rounded-3xl shadow-2xl flex flex-col max-h-[88vh] animate-scale-up relative transition-colors duration-300 border border-gray-100 dark:border-gray-700/50"
+        className="bg-white dark:bg-gray-800 w-full max-w-lg rounded-3xl shadow-2xl flex flex-col max-h-[85vh] animate-scale-up relative transition-colors duration-300 border border-gray-100 dark:border-gray-700/50 my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -277,4 +281,6 @@ export const CourseNotesModal: React.FC<CourseNotesModalProps> = ({
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : modalContent;
 };

@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Course, DAYS_OF_WEEK, calculateAllowedAbsenceHours, calculateCourseAbsentHours } from '../types';
 import { Clock, Calendar, Trash2, MapPin, Pencil, Check, X, AlertCircle, CheckCircle2, Circle, BookOpen } from 'lucide-react';
-import { CourseNotesModal } from './CourseNotesModal';
 
 interface CourseCardProps {
   course: Course;
@@ -14,6 +13,7 @@ interface CourseCardProps {
   isSelected?: boolean;
   onToggleSelection?: (id: string) => void;
   onLongPress?: (id: string) => void;
+  onOpenNotes?: (course: Course) => void;
   t: (key: string) => string;
 }
 
@@ -27,11 +27,11 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   isSelected = false,
   onToggleSelection,
   onLongPress,
+  onOpenNotes,
   t
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [showNotesModal, setShowNotesModal] = useState(false);
   
   // Long press refs
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -300,7 +300,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                setShowNotesModal(true);
+                if (onOpenNotes) onOpenNotes(course);
               }}
               className="tour-notes-btn cursor-pointer relative p-2.5 rounded-2xl bg-amber-50/80 hover:bg-amber-100 dark:bg-amber-900/20 dark:hover:bg-amber-900/40 text-amber-600 dark:text-amber-400 border border-amber-200/60 dark:border-amber-700/40 transition-all active:scale-90 shadow-2xs group/note"
               title="Ders Not Defteri"
@@ -601,19 +601,6 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           </div>
         </div>
       )}
-
-      {/* Course Notes Modal */}
-      <CourseNotesModal
-        isOpen={showNotesModal}
-        onClose={() => setShowNotesModal(false)}
-        course={course}
-        termWeeks={termWeeks}
-        currentAcademicWeek={currentAcademicWeek}
-        onUpdateNotes={(courseId, updatedNotes) => {
-          onUpdate(courseId, { weeklyNotes: updatedNotes });
-        }}
-        t={t}
-      />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { RecordsModal } from'./components/RecordsModal';
 import { InstallPromptModal } from'./components/InstallPromptModal';
 import { TourGuide } from'./components/TourGuide';
 import { CalculatorModal } from'./components/CalculatorModal';
+import { CourseNotesModal } from'./components/CourseNotesModal';
 import { CalendarDays, Plus, History, Trash2, X } from'lucide-react';
 import { format } from'date-fns';
 import { enUS, tr, es, de, fr } from'date-fns/locale';
@@ -106,6 +107,7 @@ export default function App() {
 
  const [courseToDelete, setCourseToDelete] = useState<string | null>(null);
  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
+  const [selectedCourseForNotes, setSelectedCourseForNotes] = useState<Course | null>(null);
 
  const [notificationState, setNotificationState] = useState<NotificationState>({
  isOpen: false,
@@ -473,6 +475,7 @@ export default function App() {
             termWeeks={termWeeks}
  onDelete={initiateDeleteCourse}
  onUpdate={handleUpdateCourse}
+ onOpenNotes={setSelectedCourseForNotes}
  t={t}
  // Selection Props
  isSelectionMode={isSelectionMode}
@@ -582,6 +585,21 @@ export default function App() {
  onClose={() => setIsCalculatorOpen(false)}
  t={t}
  />
+
+ {selectedCourseForNotes && (
+   <CourseNotesModal
+     isOpen={!!selectedCourseForNotes}
+     onClose={() => setSelectedCourseForNotes(null)}
+     course={selectedCourseForNotes}
+     termWeeks={termWeeks}
+     currentAcademicWeek={activeWeek}
+     onUpdateNotes={(courseId, updatedNotes) => {
+       handleUpdateCourse(courseId, { weeklyNotes: updatedNotes });
+       setSelectedCourseForNotes(prev => prev && prev.id === courseId ? { ...prev, weeklyNotes: updatedNotes } : prev);
+     }}
+     t={t}
+   />
+ )}
 
  <Sidebar
           termWeeks={termWeeks}
