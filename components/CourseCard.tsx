@@ -438,9 +438,6 @@ export const CourseCard: React.FC<CourseCardProps> = ({
             <span className="text-gray-400 dark:text-gray-500 text-[10px] uppercase tracking-wider font-extrabold block">
               {t('attendance')}
             </span>
-            <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500">
-              Haftada {weeklyHours} saat • %{absencePercentage} hak
-            </span>
           </div>
 
           <div className="text-right">
