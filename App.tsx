@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from'react';
-import { Course, DAYS_OF_WEEK, NotificationState, TermArchive } from'./types';
+import { Course, DAYS_OF_WEEK, NotificationState, TermArchive, calculateAllowedAbsenceHours } from'./types';
 import { CourseCard } from'./components/CourseCard';
 import { AttendanceCheckModal } from'./components/AttendanceCheckModal';
 import { Sidebar } from'./components/Sidebar';
@@ -7,11 +7,11 @@ import { ConfirmModal } from'./components/ConfirmModal';
 import { WeekSelectionModal } from'./components/WeekSelectionModal';
 import { WeeklyScheduleModal } from'./components/WeeklyScheduleModal';
 import { AddCourseModal } from'./components/AddCourseModal';
-import { CourseDetailModal } from'./components/CourseDetailModal';
 import { EndTermModal } from'./components/EndTermModal';
 import { RecordsModal } from'./components/RecordsModal';
 import { InstallPromptModal } from'./components/InstallPromptModal';
 import { TourGuide } from'./components/TourGuide';
+import { CalculatorModal } from'./components/CalculatorModal';
 import { CalendarDays, Plus, History, Trash2, X } from'lucide-react';
 import { format } from'date-fns';
 import { enUS, tr, es, de, fr } from'date-fns/locale';
@@ -36,9 +36,14 @@ export default function App() {
  const [isWeekSelectionStep, setIsWeekSelectionStep] = useState<boolean>(false);
 
  const [currentWeek, setCurrentWeek] = useState<number>(() => {
- const saved = localStorage.getItem('currentWeek');
- return saved ? parseInt(saved, 10) : 1;
- });
+    const saved = localStorage.getItem('currentWeek');
+    return saved ? parseInt(saved, 10) : 1;
+  });
+
+  const [termWeeks, setTermWeeks] = useState<number>(() => {
+    const saved = localStorage.getItem('termWeeks');
+    return saved ? parseInt(saved, 10) : 14;
+  });
 
  const [courses, setCourses] = useState<Course[]>(() => {
  try {
@@ -97,8 +102,7 @@ export default function App() {
  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
  const [isEndTermModalOpen, setIsEndTermModalOpen] = useState(false);
  const [isRecordsModalOpen, setIsRecordsModalOpen] = useState(false);
-
- const [detailModalCourseId, setDetailModalCourseId] = useState<string | null>(null);
+ const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
  const [courseToDelete, setCourseToDelete] = useState<string | null>(null);
  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
@@ -112,9 +116,6 @@ export default function App() {
  // Derive active data source: If viewing archive, use that. Otherwise use live state.
  const activeCourses = viewingArchive ? viewingArchive.courses : courses;
  const activeWeek = viewingArchive ? viewingArchive.finalWeek : currentWeek;
-
- // Derive selected course for detail modal based on active source
- const selectedCourseForDetail = activeCourses.find(c => c.id === detailModalCourseId) || null;
 
  // --- Effects ---
 
@@ -139,6 +140,10 @@ export default function App() {
  useEffect(() => {
  localStorage.setItem('currentWeek', String(currentWeek));
  }, [currentWeek]);
+
+  useEffect(() => {
+    localStorage.setItem('termWeeks', String(termWeeks));
+  }, [termWeeks]);
 
  useEffect(() => {
  const root = window.document.documentElement;
@@ -194,24 +199,41 @@ export default function App() {
 
  // --- Handlers ---
 
- const handleAddCourse = (data: { name: string; day: string; time: string; limit: number; classroom: string; isRoutine?: boolean }) => {
- if (viewingArchive) return; // Prevent editing in archive mode
+ const handleAddCourse = (data: { 
+    name: string; 
+    day: string; 
+    time: string; 
+    limit: number; 
+    classroom: string; 
+    weeklyHours?: number;
+    absencePercentage?: number;
+    isRoutine?: boolean 
+  }) => {
+    if (viewingArchive) return;
 
- const newCourse: Course = {
- id: generateId(),
- courseName: data.name,
- day: data.day,
- time: data.time,
- classroom: data.classroom,
- allowedAbsences: data.limit,
- currentAbsences: 0,
- absenceDates: [],
- attendanceLog: {},
- isIncomplete: false,
- isRoutine: data.isRoutine || false
- };
- setCourses([...courses, newCourse]);
- };
+    const weeklyHours = data.weeklyHours || 3;
+    const absencePercentage = data.absencePercentage || 30;
+    const calculatedLimit = data.limit > 0 
+      ? data.limit 
+      : calculateAllowedAbsenceHours(weeklyHours, absencePercentage, termWeeks);
+
+    const newCourse: Course = {
+      id: generateId(),
+      courseName: data.name,
+      day: data.day,
+      time: data.time,
+      classroom: data.classroom,
+      weeklyHours,
+      absencePercentage,
+      allowedAbsences: calculatedLimit,
+      currentAbsences: 0,
+      absenceDates: [],
+      attendanceLog: {},
+      isIncomplete: false,
+      isRoutine: data.isRoutine || false
+    };
+    setCourses([...courses, newCourse]);
+  };
 
  const handleUpdateCourse = (id: string, updatedData: Partial<Course>) => {
  if (viewingArchive) return; // Prevent editing in archive mode
@@ -448,10 +470,10 @@ export default function App() {
  key={course.id} 
  course={course} 
  currentAcademicWeek={activeWeek}
+            termWeeks={termWeeks}
  onDelete={initiateDeleteCourse}
  onUpdate={handleUpdateCourse}
  t={t}
- onOpenDetails={() => setDetailModalCourseId(course.id)} 
  // Selection Props
  isSelectionMode={isSelectionMode}
  isSelected={selectedCourseIds.has(course.id)}
@@ -529,7 +551,8 @@ export default function App() {
  t={t}
  />
 
- <AddCourseModal 
+ <AddCourseModal
+          termWeeks={termWeeks} 
  isOpen={isAddModalOpen}
  onClose={() => setIsAddModalOpen(false)}
  onAdd={(data) => {
@@ -537,15 +560,6 @@ export default function App() {
  setIsAddModalOpen(false);
  }}
  />
-
- <CourseDetailModal 
- isOpen={!!selectedCourseForDetail}
- onClose={() => setDetailModalCourseId(null)}
- course={selectedCourseForDetail}
- onUpdate={handleUpdateCourse}
- t={t}
- />
- 
  {/* New Modals */}
  <EndTermModal 
  isOpen={isEndTermModalOpen}
@@ -563,7 +577,15 @@ export default function App() {
  t={t}
  />
 
+ <CalculatorModal 
+ isOpen={isCalculatorOpen}
+ onClose={() => setIsCalculatorOpen(false)}
+ t={t}
+ />
+
  <Sidebar
+          termWeeks={termWeeks}
+          onTermWeeksChange={setTermWeeks}
  isOpen={isSidebarOpen}
  onClose={() => setIsSidebarOpen(false)}
  isDarkMode={isDarkMode}
@@ -576,6 +598,7 @@ export default function App() {
  onOpenRecords={() => setIsRecordsModalOpen(true)}
  isViewingArchive={!!viewingArchive}
  onExitArchive={() => setViewingArchive(null)}
+ onOpenCalculator={() => setIsCalculatorOpen(true)}
  t={t}
  />
 
