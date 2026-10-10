@@ -312,10 +312,20 @@ export const CourseCard: React.FC<CourseCardProps> = ({
               <div className="flex items-center bg-gray-50 dark:bg-gray-700/50 rounded-xl px-2 py-1.5 border border-gray-100 dark:border-gray-700">
                 <Clock size={14} className="text-gray-400 mr-2" />
                 <input
-                  type="time"
+                  type="text"
                   value={editForm.time}
-                  onChange={(e) => setEditForm({...editForm, time: e.target.value})}
-                  className="bg-transparent text-sm text-gray-700 dark:text-gray-300 outline-none font-bold py-1 [color-scheme:light] dark:[color-scheme:dark]"
+                  onChange={(e) => {
+                    let val = e.target.value.replace(/[^\d:]/g, '');
+                    if (val.length === 2 && !val.includes(':') && editForm.time.length < val.length) {
+                      val += ':';
+                    }
+                    if (val.length > 5) val = val.slice(0, 5);
+                    setEditForm({...editForm, time: val});
+                  }}
+                  className="bg-transparent text-sm text-gray-700 dark:text-gray-300 outline-none font-bold py-1 w-[4.5rem]"
+                  placeholder="09:30"
+                  pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
+                  title="Lütfen geçerli bir saat girin (Örn: 09:30)"
                 />
               </div>
 

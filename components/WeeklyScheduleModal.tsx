@@ -234,10 +234,20 @@ export const WeeklyScheduleModal: React.FC<WeeklyScheduleModalProps> = ({ isOpen
  
  <div className="grid grid-cols-2 gap-4">
  <input
- type="time"
+ type="text"
  value={newItemTime}
- onChange={(e) => setNewItemTime(e.target.value)}
- className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-transparent focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 rounded-2xl transition-all outline-none text-gray-800 dark:text-white font-medium [color-scheme:light] dark:[color-scheme:dark]"
+ onChange={(e) => {
+   let val = e.target.value.replace(/[^\d:]/g, '');
+   if (val.length === 2 && !val.includes(':') && newItemTime.length < val.length) {
+     val += ':';
+   }
+   if (val.length > 5) val = val.slice(0, 5);
+   setNewItemTime(val);
+ }}
+ className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-transparent focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 rounded-2xl transition-all outline-none text-gray-800 dark:text-white font-medium"
+ placeholder="09:30"
+ pattern="^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
+ title="Lütfen geçerli bir saat girin (Örn: 09:30)"
  />
  <input
  type="text"
