@@ -14,6 +14,7 @@ export interface Course {
   isRoutine?: boolean; // New flag: If true, it won't show on the main home screen
   midtermScore?: number; // Vize Notu
   finalScore?: number; // Final Notu
+  weeklyNotes?: { [week: number]: string }; // Hafta hafta ders notları
 }
 
 export interface TermArchive {

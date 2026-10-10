@@ -53,6 +53,15 @@ export const TourGuide: React.FC = () => {
               }
             },
             {
+              ...(document.querySelector('.tour-notes-btn') ? { element: '.tour-notes-btn' } : {}),
+              popover: {
+                title: 'Ders Not Defteri 📝',
+                description: 'Ders kartlarınızın sağ üst köşesindeki kitap ikonuna tıklayarak hafta hafta ders notlarınızı alabilir, ödev ve sınav tüyolarınızı kaydedebilirsiniz.',
+                side: 'bottom',
+                align: 'start'
+              }
+            },
+            {
               popover: {
                 title: 'Harika! Hazırsınız.',
                 description: 'Artık derslerinizi eklemeye ve yoklamalarınızı takip etmeye başlayabilirsiniz!',

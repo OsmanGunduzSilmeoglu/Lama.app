@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Course, DAYS_OF_WEEK, calculateAllowedAbsenceHours, calculateCourseAbsentHours } from '../types';
-import { Clock, Calendar, Trash2, MapPin, Pencil, Check, X, AlertCircle, CheckCircle2, Circle } from 'lucide-react';
+import { Clock, Calendar, Trash2, MapPin, Pencil, Check, X, AlertCircle, CheckCircle2, Circle, BookOpen } from 'lucide-react';
+import { CourseNotesModal } from './CourseNotesModal';
 
 interface CourseCardProps {
   course: Course;
@@ -30,6 +31,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
   
   // Long press refs
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -287,6 +289,26 @@ export const CourseCard: React.FC<CourseCardProps> = ({
               title={t('save')}
             >
               <Check size={22} />
+            </button>
+          </div>
+        )}
+
+        {/* Notebook Button at the Top-Right Corner */}
+        {!isSelectionMode && !isEditing && (
+          <div className="shrink-0 flex items-center">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowNotesModal(true);
+              }}
+              className="tour-notes-btn cursor-pointer relative p-2.5 rounded-2xl bg-amber-50/80 hover:bg-amber-100 dark:bg-amber-900/20 dark:hover:bg-amber-900/40 text-amber-600 dark:text-amber-400 border border-amber-200/60 dark:border-amber-700/40 transition-all active:scale-90 shadow-2xs group/note"
+              title="Ders Not Defteri"
+            >
+              <BookOpen size={18} className="group-hover/note:scale-110 transition-transform" />
+              {course.weeklyNotes && Object.values(course.weeklyNotes).some(n => typeof n === 'string' && n.trim().length > 0) && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-white dark:ring-gray-800 animate-pulse" />
+              )}
             </button>
           </div>
         )}
@@ -579,6 +601,19 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           </div>
         </div>
       )}
+
+      {/* Course Notes Modal */}
+      <CourseNotesModal
+        isOpen={showNotesModal}
+        onClose={() => setShowNotesModal(false)}
+        course={course}
+        termWeeks={termWeeks}
+        currentAcademicWeek={currentAcademicWeek}
+        onUpdateNotes={(courseId, updatedNotes) => {
+          onUpdate(courseId, { weeklyNotes: updatedNotes });
+        }}
+        t={t}
+      />
     </div>
   );
 };
