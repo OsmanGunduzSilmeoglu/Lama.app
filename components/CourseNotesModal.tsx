@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Course } from '../types';
-import { X, BookOpen, ChevronDown, ChevronUp, Check, Trash2, Sparkles } from 'lucide-react';
+import { X, BookOpen, ChevronDown, ChevronUp, Check, Trash2 } from 'lucide-react';
 
 interface CourseNotesModalProps {
   isOpen: boolean;
@@ -87,7 +87,7 @@ export const CourseNotesModal: React.FC<CourseNotesModalProps> = ({
       onClick={onClose}
     >
       <div 
-        className="bg-white dark:bg-gray-800 w-full max-w-lg rounded-3xl shadow-2xl flex flex-col max-h-[85vh] animate-scale-up relative transition-colors duration-300 border border-gray-100 dark:border-gray-700/50 my-auto"
+        className="bg-white dark:bg-gray-800 w-full max-w-lg rounded-3xl shadow-2xl flex flex-col max-h-[85vh] animate-scale-up relative transition-colors duration-300 border border-gray-100 dark:border-gray-700/50 my-auto overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
@@ -250,20 +250,6 @@ export const CourseNotesModal: React.FC<CourseNotesModalProps> = ({
           })}
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 px-6 border-t border-gray-100 dark:border-gray-700/60 bg-gray-50/50 dark:bg-gray-800/50 rounded-b-3xl flex items-center justify-between shrink-0">
-          <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
-            <Sparkles size={14} className="text-amber-500" />
-            <span>Tüm notlar cihazınızda güvenle saklanır.</span>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2.5 bg-gray-900 hover:bg-black dark:bg-gray-700 dark:hover:bg-gray-600 text-white rounded-xl text-xs font-bold transition-all active:scale-95 shadow-md cursor-pointer"
-          >
-            Tamam
-          </button>
-        </div>
       </div>
     </div>
   );
